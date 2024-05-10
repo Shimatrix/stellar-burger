@@ -1,10 +1,28 @@
-import { FC } from 'react';
+import { Preloader } from '@ui';
+import { FeedUI } from '@ui-pages';
+import { FC, useEffect } from 'react';
+import { useSelector } from '../../services/store';
+import { getFeeds, feedThunk } from '../../services/slices/feedSlice';
+import { useDispatch } from '../../services/store';
 
-export const Feed: FC = () =>
-  // if (!orders.length) {
-  //   return <Preloader />;
-  // }
+export const Feed: FC = () => {
+  const feed = useSelector(getFeeds);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(feedThunk());
+  }, [dispatch]);
 
-  // return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
+  const handleUpdateFeeds = () => {
+    dispatch(feedThunk());
+  };
 
-  null;
+  console.log(feed);
+
+  if (!feed.feed?.orders) {
+    return <Preloader />;
+  }
+
+  return (
+    <FeedUI orders={feed.feed.orders} handleGetFeeds={handleUpdateFeeds} />
+  );
+};
