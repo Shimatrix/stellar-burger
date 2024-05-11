@@ -37,7 +37,7 @@ export const ordersThunk = createAsyncThunk('orders/orders', async () => {
 export const orderNumberThunk = createAsyncThunk(
   'orders/orderNumber',
   async (number: number) => {
-    const order = await getOrderByNumberApi(number);
+    const order = getOrderByNumberApi(number);
     return order;
   }
 );
@@ -54,7 +54,7 @@ export const ordersSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    orderRequest: (state) => {
+    close: (state) => {
       state.orderRequest = false;
       state.orderModalData = null;
     }
@@ -122,5 +122,5 @@ export const ordersSlice = createSlice({
   }
 });
 
-export const { orderRequest } = ordersSlice.actions;
+export const { close } = ordersSlice.actions;
 export const ordersReducer = ordersSlice.reducer;

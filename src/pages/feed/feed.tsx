@@ -16,8 +16,6 @@ export const Feed: FC = () => {
     dispatch(feedThunk());
   };
 
-  console.log(feed);
-
   if (!feed.feed?.orders) {
     return <Preloader />;
   }

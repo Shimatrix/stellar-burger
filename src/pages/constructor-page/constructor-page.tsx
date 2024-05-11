@@ -20,7 +20,9 @@ export const ConstructorPage: FC = () => {
     dispatch(ingredientsThunk());
   }, [dispatch]);
 
-  const isIngredientsLoading = false;
+  const isIngredientsLoading = useSelector(
+    (state) => state.ingredients.loading
+  );
 
   return (
     <>

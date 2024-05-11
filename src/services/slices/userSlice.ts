@@ -15,7 +15,7 @@ import {
   updateUserApi
 } from '@api';
 import { RootState } from '../store';
-import { setCookie, deleteCookie } from '../../utils/cookie';
+import { setCookie, deleteCookie, getCookie } from '../../utils/cookie';
 
 export const sliceName = 'user';
 
@@ -45,15 +45,21 @@ const initialState: TUserState = {
   error: null
 };
 
-export const checkUserAuth = createAsyncThunk<UserDto, void>(
+export const checkUserAuth = createAsyncThunk(
   `${sliceName}/checkUserAuth`,
   async (_, { rejectWithValue, dispatch }) => {
-    try {
-      const data = await getUserApi();
-      return data.user;
-    } catch (error) {
-      return rejectWithValue(error);
-    } finally {
+    if (getCookie('accessToken')) {
+      getUserApi()
+        .then((response) => {
+          dispatch(checkUser(response.user));
+        })
+        .catch((err) => {
+          rejectWithValue(err);
+        })
+        .finally(() => {
+          dispatch(authCheck());
+        });
+    } else {
       dispatch(authCheck());
     }
   }
@@ -117,12 +123,15 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       state.isAuth = false;
+    },
+    checkUser: (state, action) => {
+      state.data = action.payload;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(checkUserAuth.fulfilled, (state, action) => {
-        state.data = action.payload;
+        // state.data = action.payload;
         state.statusRequest = StatusRequest.Success;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -147,7 +156,7 @@ export const userSlice = createSlice({
   }
 });
 
-export const { authCheck, logout } = userSlice.actions;
+export const { authCheck, logout, checkUser } = userSlice.actions;
 export const userReducer = userSlice.reducer;
 export const getUser = (state: RootState) => state.user.data;
 export const getIsAuthChecked = (state: RootState) =>

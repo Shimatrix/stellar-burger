@@ -1,26 +1,32 @@
-import { ConstructorPage } from '@pages';
-import { Feed } from '@pages';
-import { Login } from '@pages';
-import { Register } from '@pages';
-import { ForgotPassword } from '@pages';
-import { ResetPassword } from '@pages';
-import { Profile } from '@pages';
-import { ProfileOrders } from '@pages';
-import { NotFound404 } from '@pages';
-import { Modal } from '@components';
-import { OrderInfo } from '@components';
-import { IngredientDetails } from '@components';
+import {
+  ConstructorPage,
+  Feed,
+  Login,
+  Register,
+  ForgotPassword,
+  ResetPassword,
+  Profile,
+  ProfileOrders,
+  NotFound404
+} from '@pages';
+import { Modal, OrderInfo, IngredientDetails, AppHeader } from '@components';
 import '../../index.css';
 import styles from './app.module.css';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { PrivateRoute } from '../private-route';
-
-import { AppHeader } from '@components';
+import { useEffect } from 'react';
+import { checkUserAuth } from '../../services/slices/userSlice';
+import { useDispatch } from '../../services/store';
 
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const backgroundLocation = location.state?.background;
+
+  useEffect(() => {
+    dispatch(checkUserAuth());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
@@ -103,7 +109,7 @@ const App = () => {
             path='/profile/orders/:number'
             element={
               <PrivateRoute>
-                <Modal title={'111'} onClose={() => {}}>
+                <Modal title={'Детали заказа'} onClose={() => navigate(-1)}>
                   <OrderInfo />
                 </Modal>
               </PrivateRoute>

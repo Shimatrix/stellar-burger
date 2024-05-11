@@ -14,8 +14,6 @@ export const PrivateRoute = ({ onlyUnAuth, children }: PrivateRouteProps) => {
   const checkAuthenticated = useSelector(getIsAuthChecked);
   const user = useSelector((state) => state.user.data);
 
-  console.log(`checkAuthenticated: ${checkAuthenticated} user: ${user}`);
-
   if (!checkAuthenticated) {
     return <Preloader />;
   }
