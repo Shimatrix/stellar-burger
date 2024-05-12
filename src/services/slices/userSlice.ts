@@ -47,14 +47,11 @@ const initialState: TUserState = {
 
 export const checkUserAuth = createAsyncThunk(
   `${sliceName}/checkUserAuth`,
-  async (_, { rejectWithValue, dispatch }) => {
+  async (_, { dispatch }) => {
     if (getCookie('accessToken')) {
       getUserApi()
         .then((response) => {
           dispatch(checkUser(response.user));
-        })
-        .catch((err) => {
-          rejectWithValue(err);
         })
         .finally(() => {
           dispatch(authCheck());
@@ -130,8 +127,7 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(checkUserAuth.fulfilled, (state, action) => {
-        // state.data = action.payload;
+      .addCase(checkUserAuth.fulfilled, (state) => {
         state.statusRequest = StatusRequest.Success;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
