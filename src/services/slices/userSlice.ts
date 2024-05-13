@@ -90,13 +90,9 @@ export const loginUser = createAsyncThunk<UserDto, TLoginData>(
 
 export const updateUser = createAsyncThunk<UserDto, Partial<UserDto>>(
   `${sliceName}/updateUser`,
-  async (userData, { rejectWithValue }) => {
-    try {
-      const data = await updateUserApi(userData);
-      return data.user;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
+  async (userData) => {
+    const data = await updateUserApi(userData);
+    return data.user;
   }
 );
 
@@ -142,6 +138,13 @@ export const userSlice = createSlice({
         state.isAuth = false;
         state.data = null;
         state.statusRequest = StatusRequest.Idle;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.statusRequest = StatusRequest.Success;
+      })
+      .addCase(updateUser.rejected, (state) => {
+        state.statusRequest = StatusRequest.Failed;
       })
       .addMatcher(isPending, (state) => {
         state.statusRequest = StatusRequest.Loading;
