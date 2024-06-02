@@ -10,7 +10,7 @@ type IngredientsState = {
   error: string | null;
 };
 
-const initialState: IngredientsState = {
+export const initialState: IngredientsState = {
   buns: [],
   mains: [],
   sauces: [],
