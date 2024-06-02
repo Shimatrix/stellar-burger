@@ -3,7 +3,8 @@ import {
   addItems,
   removeItems,
   clearOrder,
-  moveItems
+  moveItems,
+  initialState
 } from '../slices/constructorSlice';
 import { TConstructorIngredient } from '@utils-types';
 
@@ -12,11 +13,6 @@ jest.mock('uuid', () => ({
 }));
 
 describe('constructorSlice', () => {
-  const initialState = {
-    bun: null,
-    ingredients: [] as TConstructorIngredient[]
-  };
-
   test('должен вернуть начальное состояние', () => {
     expect(constructorReducer(undefined, { type: 'unknown' })).toEqual(
       initialState

@@ -2,7 +2,7 @@ import user from '../fixtures/userData.json';
 
 describe('cypress tests', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4000/');
+    cy.visit('/');
     cy.intercept('GET', '/api/ingredients', { fixture: 'ingredients.json' });
   });
   describe('Тест добавления ингредиентов', () => {
@@ -61,7 +61,7 @@ describe('cypress tests', () => {
     beforeEach(() => {
       cy.setCookie('accessToken', 'accessToken');
       localStorage.setItem('refreshToken', 'refreshToken');
-      cy.visit('http://localhost:4000/');
+      cy.visit('/');
       cy.intercept('GET', '/api/auth/user', { fixture: 'userData.json' });
     });
 
@@ -75,7 +75,7 @@ describe('cypress tests', () => {
       ).should('contain.value', user.user.email);
     });
     it('должен произойти заказ', () => {
-      cy.visit('http://localhost:4000/');
+      cy.visit('/');
       cy.intercept('POST', '/api/orders', { fixture: 'orderData.json' }).as(
         'orderRequest'
       );

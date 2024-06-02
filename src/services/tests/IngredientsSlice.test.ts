@@ -1,30 +1,63 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { ingredientsReducer, ingredientsThunk } from '../slices/IngredientsSlice';
+import {
+  ingredientsReducer,
+  ingredientsThunk,
+  initialState
+} from '../slices/IngredientsSlice';
 import { TIngredient } from '@utils-types';
 import { getIngredientsApi } from '../../utils/burger-api';
 
 jest.mock('../../utils/burger-api');
 
 const mockIngredientsData: TIngredient[] = [
-  { _id: '1', name: 'Bun', type: 'bun', proteins: 10, fat: 5, carbohydrates: 20, calories: 150, price: 50, image: 'image', image_large: 'image_large', image_mobile: 'image_mobile' },
-  { _id: '2', name: 'Main', type: 'main', proteins: 30, fat: 20, carbohydrates: 10, calories: 300, price: 100, image: 'image', image_large: 'image_large', image_mobile: 'image_mobile' },
-  { _id: '3', name: 'Sauce', type: 'sauce', proteins: 5, fat: 2, carbohydrates: 5, calories: 50, price: 20, image: 'image', image_large: 'image_large', image_mobile: 'image_mobile' }
+  {
+    _id: '1',
+    name: 'Bun',
+    type: 'bun',
+    proteins: 10,
+    fat: 5,
+    carbohydrates: 20,
+    calories: 150,
+    price: 50,
+    image: 'image',
+    image_large: 'image_large',
+    image_mobile: 'image_mobile'
+  },
+  {
+    _id: '2',
+    name: 'Main',
+    type: 'main',
+    proteins: 30,
+    fat: 20,
+    carbohydrates: 10,
+    calories: 300,
+    price: 100,
+    image: 'image',
+    image_large: 'image_large',
+    image_mobile: 'image_mobile'
+  },
+  {
+    _id: '3',
+    name: 'Sauce',
+    type: 'sauce',
+    proteins: 5,
+    fat: 2,
+    carbohydrates: 5,
+    calories: 50,
+    price: 20,
+    image: 'image',
+    image_large: 'image_large',
+    image_mobile: 'image_mobile'
+  }
 ];
 
 describe('ingredientsSlice', () => {
-  const initialState = {
-    buns: [],
-    mains: [],
-    sauces: [],
-    loading: false,
-    error: null
-  };
-
-  const createTestStore = () => configureStore({
-    reducer: {
-      ingredients: ingredientsReducer
-    }
-  });
+  const createTestStore = () =>
+    configureStore({
+      reducer: {
+        ingredients: ingredientsReducer
+      }
+    });
 
   test('должен вернуть начальное состояние', () => {
     const store = createTestStore();
@@ -63,7 +96,9 @@ describe('ingredientsSlice', () => {
   test('должен обработать ingredientsThunk.rejected', async () => {
     const store = createTestStore();
     const errorMessage = 'Ошибка загрузки';
-    (getIngredientsApi as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+    (getIngredientsApi as jest.Mock).mockRejectedValueOnce(
+      new Error(errorMessage)
+    );
 
     await store.dispatch(ingredientsThunk() as any);
     const state = store.getState().ingredients;

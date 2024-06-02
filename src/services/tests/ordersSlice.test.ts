@@ -1,27 +1,41 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { ordersReducer, feedThunk, ordersThunk, orderNumberThunk, orderBurgerThunk, close } from '../slices/ordersSlice';
+import {
+  ordersReducer,
+  feedThunk,
+  ordersThunk,
+  orderNumberThunk,
+  orderBurgerThunk,
+  close,
+  initialState
+} from '../slices/ordersSlice';
 import { TOrder } from '@utils-types';
-import { getFeedsApi, getOrdersApi, orderBurgerApi, getOrderByNumberApi } from '../../utils/burger-api';
+import {
+  getFeedsApi,
+  getOrdersApi,
+  orderBurgerApi,
+  getOrderByNumberApi
+} from '../../utils/burger-api';
 
 jest.mock('../../utils/burger-api');
 
-const mockOrderData: TOrder = { _id: '1', status: 'done', name: 'Burger', createdAt: '2021-01-01', updatedAt: '2021-01-01', number: 1, ingredients: ['1', '2'] };
+const mockOrderData: TOrder = {
+  _id: '1',
+  status: 'done',
+  name: 'Burger',
+  createdAt: '2021-01-01',
+  updatedAt: '2021-01-01',
+  number: 1,
+  ingredients: ['1', '2']
+};
 const mockOrdersData: TOrder[] = [mockOrderData];
 
 describe('ordersSlice', () => {
-  const initialState = {
-    orders: [],
-    orderRequest: false,
-    orderModalData: null,
-    error: null,
-    loading: false
-  };
-
-  const createTestStore = () => configureStore({
-    reducer: {
-      orders: ordersReducer
-    }
-  });
+  const createTestStore = () =>
+    configureStore({
+      reducer: {
+        orders: ordersReducer
+      }
+    });
 
   test('должен вернуть начальное состояние', () => {
     const store = createTestStore();
@@ -42,7 +56,9 @@ describe('ordersSlice', () => {
 
   test('должен обработать feedThunk.fulfilled', async () => {
     const store = createTestStore();
-    (getFeedsApi as jest.Mock).mockResolvedValueOnce({ orders: mockOrdersData });
+    (getFeedsApi as jest.Mock).mockResolvedValueOnce({
+      orders: mockOrdersData
+    });
 
     await store.dispatch(feedThunk() as any);
     const state = store.getState().orders;
@@ -123,7 +139,9 @@ describe('ordersSlice', () => {
 
   test('должен обработать orderNumberThunk.fulfilled', async () => {
     const store = createTestStore();
-    (getOrderByNumberApi as jest.Mock).mockResolvedValueOnce({ orders: [mockOrderData] });
+    (getOrderByNumberApi as jest.Mock).mockResolvedValueOnce({
+      orders: [mockOrderData]
+    });
 
     await store.dispatch(orderNumberThunk(1) as any);
     const state = store.getState().orders;
@@ -138,7 +156,9 @@ describe('ordersSlice', () => {
   test('должен обработать orderNumberThunk.rejected', async () => {
     const store = createTestStore();
     const errorMessage = 'Ошибка загрузки';
-    (getOrderByNumberApi as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+    (getOrderByNumberApi as jest.Mock).mockRejectedValueOnce(
+      new Error(errorMessage)
+    );
 
     await store.dispatch(orderNumberThunk(1) as any);
     const state = store.getState().orders;
@@ -163,7 +183,9 @@ describe('ordersSlice', () => {
 
   test('должен обработать orderBurgerThunk.fulfilled', async () => {
     const store = createTestStore();
-    (orderBurgerApi as jest.Mock).mockResolvedValueOnce({ order: mockOrderData });
+    (orderBurgerApi as jest.Mock).mockResolvedValueOnce({
+      order: mockOrderData
+    });
 
     await store.dispatch(orderBurgerThunk(['1', '2']) as any);
     const state = store.getState().orders;
@@ -179,7 +201,9 @@ describe('ordersSlice', () => {
   test('должен обработать orderBurgerThunk.rejected', async () => {
     const store = createTestStore();
     const errorMessage = 'Ошибка загрузки';
-    (orderBurgerApi as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+    (orderBurgerApi as jest.Mock).mockRejectedValueOnce(
+      new Error(errorMessage)
+    );
 
     await store.dispatch(orderBurgerThunk(['1', '2']) as any);
     const state = store.getState().orders;

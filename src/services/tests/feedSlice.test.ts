@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { feedReducer, feedThunk } from '../slices/feedSlice';
+import { feedReducer, feedThunk, initialState } from '../slices/feedSlice';
 import { TOrdersData } from '@utils-types';
 import { getFeedsApi } from '../../utils/burger-api';
 
@@ -7,24 +7,27 @@ jest.mock('../../utils/burger-api');
 
 const mockFeedData: TOrdersData = {
   orders: [
-    { _id: '1', status: 'done', name: 'Burger', createdAt: '2021-01-01', updatedAt: '2021-01-01', number: 1, ingredients: ['1', '2'] }
+    {
+      _id: '1',
+      status: 'done',
+      name: 'Burger',
+      createdAt: '2021-01-01',
+      updatedAt: '2021-01-01',
+      number: 1,
+      ingredients: ['1', '2']
+    }
   ],
   total: 100,
   totalToday: 10
 };
 
 describe('feedSlice', () => {
-  const initialState = {
-    feed: null,
-    loading: false,
-    error: null
-  };
-
-  const createTestStore = () => configureStore({
-    reducer: {
-      feed: feedReducer
-    }
-  });
+  const createTestStore = () =>
+    configureStore({
+      reducer: {
+        feed: feedReducer
+      }
+    });
 
   test('должен вернуть начальное состояние', () => {
     const store = createTestStore();

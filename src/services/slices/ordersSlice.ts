@@ -16,7 +16,7 @@ type OrdersState = {
   loading: boolean;
 };
 
-const initialState: OrdersState = {
+export const initialState: OrdersState = {
   orders: [],
   orderRequest: false,
   orderModalData: null,
