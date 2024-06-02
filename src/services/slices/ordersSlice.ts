@@ -88,6 +88,7 @@ export const ordersSlice = createSlice({
       })
       .addCase(ordersThunk.rejected, (state, action) => {
         state.loading = false;
+        state.orderRequest = false;
         state.error = action.error.message ?? null;
       })
       .addCase(orderNumberThunk.pending, (state) => {
