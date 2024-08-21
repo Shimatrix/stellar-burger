@@ -1,8 +1,3 @@
-
----
-
-### `README.md` для **Stellar Burger**
-
 ```markdown
 # Stellar Burger
 
