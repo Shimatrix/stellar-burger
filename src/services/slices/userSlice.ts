@@ -13,13 +13,13 @@ import {
   TLoginData,
   TRegisterData,
   updateUserApi
-} from '@api';
+} from '../../utils/burger-api';
 import { RootState } from '../store';
 import { setCookie, deleteCookie, getCookie } from '../../utils/cookie';
 
 export const sliceName = 'user';
 
-const enum StatusRequest {
+export const enum StatusRequest {
   Idle = 'Idle',
   Loading = 'Loading',
   Success = 'Success',
@@ -42,7 +42,7 @@ const initialState: TUserState = {
   isAuth: false,
   data: null,
   statusRequest: StatusRequest.Idle,
-  error: null
+  error: ''
 };
 
 export const checkUserAuth = createAsyncThunk(
